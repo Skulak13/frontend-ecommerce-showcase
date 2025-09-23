@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Forma'sint - a store with professional climbing equipment."
+    />
+    <meta name="robots" content="index, follow" />
+    <title>Forma'sint E-commerce</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <div class="layout__wrapper">
+      <!-- Semi-transparent product-modal__overlay for modal (hidden by default) -->
+      <div class="product-modal__overlay" id="modalOverlay"></div>
+
+      <header class="header">
+        <!-- ——— MOBILE HEADER ——— -->
+        <div class="header--mobile" role="navigation" aria-label="Mobile menu">
+          <a href="/" class="header__brand" aria-label="Go to homepage">
+            <img
+              src="/assets/images/icons/forma-icon.svg"
+              class="header__brand-icon"
+              alt="Forma'sint logo"
+            />
+            <span class="header__brand-name u-font-body-uppercase"
+              >Forma'sint.</span
+            >
+          </a>
+          <button
+            class="header__menu-toggle"
+            id="menuToggle"
+            aria-expanded="false"
+            aria-label="Open menu"
+            aria-controls="navigationMenu"
+          >
+            <img
+              src="/assets/images/icons/menu-icon.svg"
+              class="header__menu-icon"
+              alt="Menu icon"
+            />
+            <span class="header__menu-text u-font-body-uppercase">Menu</span>
+          </button>
+        </div>
+
+        <!-- ——— DESKTOP NAVIGATION ——— -->
+        <nav class="header--desktop" role="navigation" aria-label="Main menu">
+          <div class="header__idomods-container">
+            <a href="/" class="header__brand" aria-label="Go to homepage">
+              <img
+                src="/assets/images/icons/forma-icon.svg"
+                class="header__brand-icon"
+                alt="Forma'sint logo"
+              />
+              <span class="header__brand-name u-font-body-uppercase"
+                >Forma'sint.</span
+              >
+            </a>
+            <span class="u-font-body-uppercase">Idomods &lt;/&gt;</span>
+          </div>
+
+          <ul class="header__nav u-font-body-uppercase">
+            <li><a href="#top">Home</a></li>
+            <li><a href="#featuredProducts">Featured products</a></li>
+            <li><a href="#productListing">Product listing</a></li>
+          </ul>
+          <div class="header__user-info">
+            <img src="/assets/images/icons/user-icon.svg" alt="" />
+            <span class="u-font-body-uppercase">Frontend developer</span>
+          </div>
+        </nav>
+      </header>
+
+      <main class="ecommerce-page" id="top">
+        <!-- Hero Section -->
+        <section class="hero">
+          <!-- responsywne logo SVG – utrzymujesz SVG, zmieniasz tylko CSS-owo wymiary -->
+          <img
+            src="/assets/images/logos/logo-forma.svg"
+            class="hero__logo"
+            alt="Forma'sint logo"
+            loading="eager"
+          />
+
+          <!-- art-direction dla hero__image -->
+          <picture>
+            <!-- mobilki (≤640px) -->
+            <source
+              media="(max-width: 767px)"
+              type="image/webp"
+              srcset="
+                /assets/images/hero/hero-photo-328x531.webp  328w,
+                /assets/images/hero/hero-photo-656x1062.webp 656w
+              "
+              sizes="calc(100vw - 32px)"
+            />
+
+            <!-- tablety (768px–991px) – opcjonalnie, jeśli masz środkowy kadr -->
+            <source
+              media="(min-width: 768px) and (max-width: 991px)"
+              type="image/webp"
+              srcset="
+                /assets/images/hero/hero-photo-768x1243.webp   768w,
+                /assets/images/hero/hero-photo-1536x2486.webp 1536w
+              "
+              sizes="calc(100vw - 32px)"
+            />
+
+            <!-- desktop (≥992px) -->
+            <source
+              media="(min-width: 992px)"
+              type="image/webp"
+              srcset="
+                /assets/images/hero/hero-photo-1836x732.webp  1836w,
+                /assets/images/hero/hero-photo-3672x1464.webp 3672w
+              "
+              sizes="calc(100vw - 32px)"
+            />
+
+            <!-- fallback/rzut – tu łapiemy zawsze desktopowy kadr -->
+            <img
+              src="/assets/images/hero/hero-desktop-1836x732.webp"
+              class="hero__image"
+              alt="Climber ascending an icy wall"
+              loading="lazy"
+            />
+          </picture>
+        </section>
+
+        <section class="featured-products" id="featuredProducts">
+          <div class="featured-products__container">
+            <div class="featured-products__content">
+              <header class="featured-products__header">
+                <h1
+                  class="featured-products__header-subtitle u-font-body-uppercase"
+                >
+                  Featured products
+                </h1>
+                <h2 class="featured-products__header-title">Browse featured</h2>
+              </header>
+
+              <!-- Swiper container -->
+              <div class="featured-products__swiper">
+                <div class="featured-products__wrapper swiper-wrapper">
+                  <article class="swiper-slide featured-products__card">
+                    <div class="featured-products__image-container">
+                      <div class="featured-products__image-wrapper">
+                        <img
+                          src="/assets/images/featured/featured-1.webp"
+                          alt="Dark blue alpine climbing jacket"
+                          class="featured-products__image"
+                        />
+                        <div class="featured-products__actions">
+                          <span
+                            class="featured-products__label featured-products__label--bestseller u-font-body-uppercase"
+                            >Bestseller</span
+                          >
+                          <button
+                            class="featured-products__wishlist-button"
+                            aria-label="Add to wishlist"
+                          >
+                            <img
+                              src="/assets/images/icons/icon-favorite.svg"
+                              alt=""
+                              class="featured-products__wishlist-icon"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="featured-products__info">
+                      <h3 class="featured-products__title">
+                        Dark blue alpine climbing jacket
+                      </h3>
+                      <p class="featured-products__price u-font-body-uppercase">
+                        €300,00 EUR
+                      </p>
+                    </div>
+                  </article>
+                  <article class="swiper-slide featured-products__card">
+                    <div class="featured-products__image-container">
+                      <div class="featured-products__image-wrapper">
+                        <img
+                          src="/assets/images/featured/featured-2.webp"
+                          alt="Orange helmet for alpine TOUNDRA"
+                          class="featured-products__image"
+                        />
+                        <div class="featured-products__actions">
+                          <span
+                            class="featured-products__label featured-products__label--limited u-font-body-uppercase"
+                            >Limited Edition</span
+                          >
+                          <button
+                            class="featured-products__wishlist-button"
+                            aria-label="Add to wishlist"
+                          >
+                            <img
+                              src="/assets/images/icons/icon-favorite.svg"
+                              alt=""
+                              class="featured-products__wishlist-icon"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="featured-products__info">
+                      <h3 class="featured-products__title">
+                        Orange helmet for alpine TOUNDRA
+                      </h3>
+                      <p class="featured-products__price u-font-body-uppercase">
+                        €300,00 EUR
+                      </p>
+                    </div>
+                  </article>
+                  <article class="swiper-slide featured-products__card">
+                    <div class="featured-products__image-container">
+                      <div class="featured-products__image-wrapper">
+                        <img
+                          src="/assets/images/featured/featured-3.webp"
+                          alt="Grey alpine climbing jacket"
+                          class="featured-products__image"
+                        />
+                        <div
+                          class="featured-products__actions featured-products__actions--empty"
+                        >
+                          <button
+                            class="featured-products__wishlist-button"
+                            aria-label="Add to wishlist"
+                          >
+                            <img
+                              src="/assets/images/icons/icon-favorite.svg"
+                              alt=""
+                              class="featured-products__wishlist-icon"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="featured-products__info">
+                      <h3 class="featured-products__title">
+                        Grey alpine climbing jacket
+                      </h3>
+                      <p class="featured-products__price u-font-body-uppercase">
+                        €300,00 EUR
+                      </p>
+                    </div>
+                  </article>
+                  <article class="swiper-slide featured-products__card">
+                    <div class="featured-products__image-container">
+                      <div class="featured-products__image-wrapper">
+                        <img
+                          src="/assets/images/featured/featured-1.webp"
+                          alt="Dark blue alpine climbing jacket"
+                          class="featured-products__image"
+                        />
+                        <div class="featured-products__actions">
+                          <span
+                            class="featured-products__label featured-products__label--bestseller u-font-body-uppercase"
+                            >Bestseller</span
+                          >
+                          <button
+                            class="featured-products__wishlist-button"
+                            aria-label="Add to wishlist"
+                          >
+                            <img
+                              src="/assets/images/icons/icon-favorite.svg"
+                              alt=""
+                              class="featured-products__wishlist-icon"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="featured-products__info">
+                      <h3 class="featured-products__title">
+                        Dark blue alpine climbing jacket
+                      </h3>
+                      <p class="featured-products__price u-font-body-uppercase">
+                        €300,00 EUR
+                      </p>
+                    </div>
+                  </article>
+                  <article class="swiper-slide featured-products__card">
+                    <div class="featured-products__image-container">
+                      <div class="featured-products__image-wrapper">
+                        <img
+                          src="/assets/images/featured/featured-2.webp"
+                          alt="Orange helmet for alpine TOUNDRA"
+                          class="featured-products__image"
+                        />
+                        <div class="featured-products__actions">
+                          <span
+                            class="featured-products__label featured-products__label--limited u-font-body-uppercase"
+                            >Limited Edition</span
+                          >
+                          <button
+                            class="featured-products__wishlist-button"
+                            aria-label="Add to wishlist"
+                          >
+                            <img
+                              src="/assets/images/icons/icon-favorite.svg"
+                              alt=""
+                              class="featured-products__wishlist-icon"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="featured-products__info">
+                      <h3 class="featured-products__title">
+                        Orange helmet for alpine TOUNDRA
+                      </h3>
+                      <p class="featured-products__price u-font-body-uppercase">
+                        €300,00 EUR
+                      </p>
+                    </div>
+                  </article>
+                  <article class="swiper-slide featured-products__card">
+                    <div class="featured-products__image-container">
+                      <div class="featured-products__image-wrapper">
+                        <img
+                          src="/assets/images/featured/featured-3.webp"
+                          alt="Grey alpine climbing jacket"
+                          class="featured-products__image"
+                        />
+                        <div
+                          class="featured-products__actions featured-products__actions--empty"
+                        >
+                          <button
+                            class="featured-products__wishlist-button"
+                            aria-label="Add to wishlist"
+                          >
+                            <img
+                              src="/assets/images/icons/icon-favorite.svg"
+                              alt=""
+                              class="featured-products__wishlist-icon"
+                            />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="featured-products__info">
+                      <h3 class="featured-products__title">
+                        Grey alpine climbing jacket
+                      </h3>
+                      <p class="featured-products__price u-font-body-uppercase">
+                        €300,00 EUR
+                      </p>
+                    </div>
+                  </article>
+                </div>
+                <button
+                  class="featured-products__swiper-next"
+                  aria-label="Next product"
+                  role="button"
+                  tabindex="0"
+                >
+                  <img
+                    src="/assets/images/icons/slider-arrow.svg"
+                    alt="Next button"
+                  />
+                </button>
+              </div>
+            </div>
+            <div class="featured-products__navigation">
+              <div
+                class="featured-products__progress"
+                role="progressbar"
+                aria-label="Slider progress indicator"
+              ></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Products Grid Section -->
+        <section class="product-list" id="productListing">
+          <div class="product-list__per-page-selection">
+            <h2 class="u-font-body-uppercase">Number of products per page</h2>
+            <div class="product-list__selector" id="sizeSelector">
+              <button
+                class="product-list__toggle u-font-body-uppercase"
+                aria-haspopup="listbox"
+                aria-expanded="false"
+                aria-controls="sizeOptions"
+                id="sizeToggle"
+              >
+                <span id="currentSize">14</span>
+                <img
+                  src="/assets/images/icons/chevron-down.svg"
+                  class="chevron-down"
+                  alt="Open list"
+                />
+              </button>
+              <ul
+                class="product-list__options u-font-body-uppercase"
+                id="sizeOptions"
+                role="listbox"
+                tabindex="-1"
+              ></ul>
+            </div>
+          </div>
+
+          <div class="product-list__grid">
+            <!-- Grid Products -->
+            <div class="product-list__item" data-product-id="01">
+              <img
+                src="/assets/images/products/product-01-142.webp"
+                srcset="
+                  /assets/images/products/product-01-142.webp 142w,
+                  /assets/images/products/product-01-284.webp 284w,
+                  /assets/images/products/product-01-377.webp 377w,
+                  /assets/images/products/product-01-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 01"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 01</span
+              >
+            </div>
+            <div class="product-list__item" data-product-id="02">
+              <img
+                src="/assets/images/products/product-02-142.webp"
+                srcset="
+                  /assets/images/products/product-02-142.webp 142w,
+                  /assets/images/products/product-02-284.webp 284w,
+                  /assets/images/products/product-02-377.webp 377w,
+                  /assets/images/products/product-02-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 02"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 02</span
+              >
+            </div>
+            <div class="product-list__item" data-product-id="03">
+              <img
+                src="/assets/images/products/product-03-142.webp"
+                srcset="
+                  /assets/images/products/product-03-142.webp 142w,
+                  /assets/images/products/product-03-284.webp 284w,
+                  /assets/images/products/product-03-377.webp 377w,
+                  /assets/images/products/product-03-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 03"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 03</span
+              >
+            </div>
+            <div class="product-list__item" data-product-id="04">
+              <img
+                src="/assets/images/products/product-04-142.webp"
+                srcset="
+                  /assets/images/products/product-04-142.webp 142w,
+                  /assets/images/products/product-04-284.webp 284w,
+                  /assets/images/products/product-04-377.webp 377w,
+                  /assets/images/products/product-04-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 04"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 04</span
+              >
+            </div>
+
+            <!-- Promo Banner -->
+            <article class="promo" id="promoBanne">
+              <div>
+                <h3 class="promo__subtitle u-font-body-uppercase">
+                  Forma'sint.
+                </h3>
+                <p class="promo__title">
+                  You'll look and feel like the champion.
+                </p>
+              </div>
+              <button class="promo__button u-font-body-uppercase">
+                <span>Check this out</span>
+                <div>
+                  <img src="/assets/images/icons/chevron-right.svg" alt="" />
+                </div>
+              </button>
+            </article>
+
+            <div class="product-list__item" data-product-id="05">
+              <img
+                src="/assets/images/products/product-05-142.webp"
+                srcset="
+                  /assets/images/products/product-05-142.webp 142w,
+                  /assets/images/products/product-05-284.webp 284w,
+                  /assets/images/products/product-05-377.webp 377w,
+                  /assets/images/products/product-05-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 05"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 05</span
+              >
+            </div>
+            <div class="product-list__item" data-product-id="06">
+              <img
+                src="/assets/images/products/product-06-142.webp"
+                srcset="
+                  /assets/images/products/product-06-142.webp 142w,
+                  /assets/images/products/product-06-284.webp 284w,
+                  /assets/images/products/product-06-377.webp 377w,
+                  /assets/images/products/product-06-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 06"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 06</span
+              >
+            </div>
+            <div class="product-list__item" data-product-id="07">
+              <img
+                src="/assets/images/products/product-03-142.webp"
+                srcset="
+                  /assets/images/products/product-03-142.webp 142w,
+                  /assets/images/products/product-03-284.webp 284w,
+                  /assets/images/products/product-03-377.webp 377w,
+                  /assets/images/products/product-03-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 07"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 07</span
+              >
+            </div>
+            <div class="product-list__item" data-product-id="08">
+              <img
+                src="/assets/images/products/product-02-142.webp"
+                srcset="
+                  /assets/images/products/product-02-142.webp 142w,
+                  /assets/images/products/product-02-284.webp 284w,
+                  /assets/images/products/product-02-377.webp 377w,
+                  /assets/images/products/product-02-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 08"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 08</span
+              >
+            </div>
+            <div class="product-list__item" data-product-id="09">
+              <img
+                src="/assets/images/products/product-03-142.webp"
+                srcset="
+                  /assets/images/products/product-03-142.webp 142w,
+                  /assets/images/products/product-03-284.webp 284w,
+                  /assets/images/products/product-03-377.webp 377w,
+                  /assets/images/products/product-03-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 09"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 09</span
+              >
+            </div>
+            <div class="product-list__item" data-product-id="10">
+              <img
+                src="/assets/images/products/product-01-142.webp"
+                srcset="
+                  /assets/images/products/product-01-142.webp 142w,
+                  /assets/images/products/product-01-284.webp 284w,
+                  /assets/images/products/product-01-377.webp 377w,
+                  /assets/images/products/product-01-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 10"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 10</span
+              >
+            </div>
+            <div class="product-list__item" data-product-id="11">
+              <img
+                src="/assets/images/products/product-02-142.webp"
+                srcset="
+                  /assets/images/products/product-02-142.webp 142w,
+                  /assets/images/products/product-02-284.webp 284w,
+                  /assets/images/products/product-02-377.webp 377w,
+                  /assets/images/products/product-02-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 11"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 11</span
+              >
+            </div>
+            <div class="product-list__item" data-product-id="12">
+              <img
+                src="/assets/images/products/product-04-142.webp"
+                srcset="
+                  /assets/images/products/product-04-142.webp 142w,
+                  /assets/images/products/product-04-284.webp 284w,
+                  /assets/images/products/product-04-377.webp 377w,
+                  /assets/images/products/product-04-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 12"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 12</span
+              >
+            </div>
+            <div class="product-list__item" data-product-id="13">
+              <img
+                src="/assets/images/products/product-02-142.webp"
+                srcset="
+                  /assets/images/products/product-02-142.webp 142w,
+                  /assets/images/products/product-02-284.webp 284w,
+                  /assets/images/products/product-02-377.webp 377w,
+                  /assets/images/products/product-02-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 13"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 13</span
+              >
+            </div>
+            <div class="product-list__item" data-product-id="14">
+              <img
+                src="/assets/images/products/product-03-142.webp"
+                srcset="
+                  /assets/images/products/product-03-142.webp 142w,
+                  /assets/images/products/product-03-284.webp 284w,
+                  /assets/images/products/product-03-377.webp 377w,
+                  /assets/images/products/product-03-754.webp 754w
+                "
+                sizes="
+        (max-width: 640px) 142px,
+        (min-width: 641px) and (max-width: 991px) 50vw,
+        25vw
+      "
+                class="product-list__item-image"
+                alt="Product photo id: 14"
+                loading="lazy"
+              />
+              <span class="product-list__item-badge u-font-body-uppercase"
+                >ID: 14</span
+              >
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer" role="contentinfo">
+        <div class="footer__content">
+          <div class="footer__section footer__brand-section">
+            <a href="#" class="header__brand">
+              <img
+                src="/assets/images/icons/forma-icon.svg"
+                alt="Forma'sint logo"
+                class="header__brand-icon"
+                width="24"
+                height="24"
+              />
+              <span class="header__brand-name u-font-body-uppercase"
+                >Forma'sint.</span
+              >
+            </a>
+            <p class="footer__description">
+              Expert climbing gear for your adventures.
+            </p>
+          </div>
+
+          <nav
+            class="footer__section footer__navigation"
+            aria-labelledby="footer-nav-label"
+          >
+            <h2 id="footer-nav-label" class="footer__section-title">
+              Navigation
+            </h2>
+            <ul class="footer__links">
+              <li><a href="#home" class="footer__link">Home</a></li>
+              <li>
+                <a href="#featuredProducts" class="footer__link"
+                  >Featured Products</a
+                >
+              </li>
+              <li>
+                <a href="#productListing" class="footer__link"
+                  >Product Listing</a
+                >
+              </li>
+            </ul>
+          </nav>
+
+          <div
+            class="footer__section footer__contact"
+            aria-labelledby="footer-contact-label"
+          >
+            <h2 id="footer-contact-label" class="footer__section-title">
+              Contact Us
+            </h2>
+            <ul class="footer__links">
+              <li>
+                <a href="mailto:info@formasint.com" class="footer__link"
+                  >info@formasint.com</a
+                >
+              </li>
+              <li>
+                <a href="tel:+1234567890" class="footer__link"
+                  >+1 (234) 567-890</a
+                >
+              </li>
+              <li>123 Climbing St, Adventure City, 12345</li>
+            </ul>
+          </div>
+
+          <div
+            class="footer__section footer__social"
+            aria-labelledby="footer-social-label"
+          >
+            <h2 id="footer-social-label" class="footer__section-title">
+              Follow Us
+            </h2>
+            <ul class="footer__social-links">
+              <li>
+                <a
+                  href="https://twitter.com/formasint"
+                  class="footer__social-link"
+                  aria-label="Follow us on X (formerly Twitter)"
+                >
+                  <img
+                    src="/assets/images/logos/logo-x.svg"
+                    alt=""
+                    width="24"
+                    height="24"
+                  />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://instagram.com/formasint"
+                  class="footer__social-link"
+                  aria-label="Follow us on Instagram"
+                >
+                  <img
+                    src="/assets/images/logos/logo-instagram.svg"
+                    alt=""
+                    width="24"
+                    height="24"
+                  />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://facebook.com/formasint"
+                  class="footer__social-link"
+                  aria-label="Follow us on Facebook"
+                >
+                  <img
+                    src="/assets/images/logos/logo-facebook.svg"
+                    alt=""
+                    width="24"
+                    height="24"
+                  />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer__copyright">
+          <p>&copy; 2025 Forma'sint. All rights reserved.</p>
+          <ul class="footer__legal-links">
+            <li>
+              <a href="/privacy" class="footer__link">Privacy Policy</a>
+            </li>
+            <li>
+              <a href="/terms" class="footer__link">Terms of Service</a>
+            </li>
+          </ul>
+        </div>
+      </footer>
+
+      <!-- Menu Overlay -->
+      <div class="menu__overlay" id="menuOverlay"></div>
+
+      <!-- Product detail modal (hidden by default) -->
+      <div
+        class="product-modal"
+        id="productModal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="modalTitle"
+      >
+        <div class="product-modal__content">
+          <div class="product-modal__header">
+            <h3 class="product-modal__id u-font-body-uppercase" id="modalTitle">
+              ID:01
+            </h3>
+            <button class="product-modal__close" id="closeModal">
+              <div>
+                <img
+                  class="close-icon"
+                  src="/assets/images/icons/close-icon.svg"
+                  alt=""
+                />
+              </div>
+              <span class="u-font-body-uppercase">Close</span>
+            </button>
+          </div>
+          <img
+            class="product-modal__image"
+            src=""
+            alt="Product image"
+            style="max-width: 100%; position: absolute"
+          />
+        </div>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav
+        class="navigation-menu"
+        id="navigationMenu"
+        role="navigation"
+        aria-label="Mobile menu"
+      >
+        <div class="navigation-menu__top-bar">
+          <div class="navigation-menu__top-container">
+            <img
+              src="/assets/images/icons/forma-icon.svg"
+              alt="Back icon"
+              class="navigation-menu__back-icon"
+            />
+            <button
+              class="navigation-menu__close-button"
+              id="closeMenu"
+              aria-label="Close menu"
+            >
+              <img
+                src="/assets/images/icons/close-icon.svg"
+                alt=""
+                class="close-icon"
+              />
+              <span class="navigation-menu__close-text u-font-body-uppercase"
+                >Close</span
+              >
+            </button>
+          </div>
+        </div>
+        <div class="navigation-menu__links u-font-body-uppercase">
+          <a href="#top" class="navigation-menu__link">Home</a>
+          <a href="#featuredProducts" class="navigation-menu__link"
+            >Featured Products</a
+          >
+          <a href="#productListing" class="navigation-menu__link"
+            >Product Listing</a
+          >
+        </div>
+      </nav>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>
