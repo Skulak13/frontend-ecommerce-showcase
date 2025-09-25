@@ -11,7 +11,7 @@
 
 html {
   scroll-behavior: smooth;
-  /* przy anchorach przeglÄ…darka uwzglÄ™dni tu padding */
+  /* przy anchorach przeglądarka uwzględni tu padding */
   scroll-padding-top: var(--header-height);
 }
 
@@ -587,6 +587,7 @@ body {
   width: 100%;
   padding: 8px;
   background-color: var(--color-primary-light);
+  cursor: pointer;
 }
 
 .product-list__item-image {

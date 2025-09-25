@@ -1,15 +1,128 @@
+// --- FOCUS TRAP UTIL ---
+const FOCUSABLE_SELECTOR =
+  'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable]';
+
+function getVisibleFocusableElements(container) {
+  if (!container) return [];
+  const elements = Array.from(container.querySelectorAll(FOCUSABLE_SELECTOR));
+  return elements.filter(
+    (el) =>
+      el.offsetWidth > 0 ||
+      el.offsetHeight > 0 ||
+      el.getClientRects().length > 0
+  );
+}
+
+/**
+ * createFocusTrap(container, { onEscape })
+ * Zwraca obiekt { enable(), disable() }.
+ * - zapisuje poprzednio aktywny element,
+ * - blokuje body scroll,
+ * - ustawia aria-hidden na <main>,
+ * - obsługuje Tab / Shift+Tab oraz Escape (wywołuje onEscape).
+ */
+function createFocusTrap(container, options = {}) {
+  let lastFocused = null;
+  let trapped = false;
+  const onEscape =
+    typeof options.onEscape === "function" ? options.onEscape : null;
+
+  const mqlMobile = window.matchMedia("(max-width: 767px)");
+
+  function focusFallback(el) {
+    try {
+      el.focus();
+    } catch (e) {
+      el.setAttribute("tabindex", "-1");
+      el.focus();
+    }
+  }
+
+  function keyHandler(e) {
+    if (e.key === "Escape") {
+      if (onEscape) onEscape();
+      return;
+    }
+
+    if (e.key === "Tab") {
+      const focusable = getVisibleFocusableElements(container);
+      if (!focusable.length) {
+        e.preventDefault();
+        focusFallback(container);
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const current = document.activeElement;
+
+      if (e.shiftKey) {
+        // Shift+Tab
+        if (current === first || !container.contains(current)) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        // Tab
+        if (current === last || !container.contains(current)) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+  }
+
+  return {
+    enable() {
+      if (!container || trapped) return;
+      lastFocused = document.activeElement;
+
+      const focusable = getVisibleFocusableElements(container);
+      if (focusable.length) {
+        focusFallback(focusable[0]);
+      } else {
+        focusFallback(container);
+      }
+
+      if (mqlMobile.matches) {
+        document.body.style.overflow = "hidden";
+      }
+
+      const mainEl = document.querySelector("main");
+      if (mainEl) mainEl.setAttribute("aria-hidden", "true");
+
+      document.addEventListener("keydown", keyHandler);
+      trapped = true;
+    },
+    disable() {
+      if (!trapped) return;
+
+      document.removeEventListener("keydown", keyHandler);
+
+      //  cofamy blokadę tylko jeśli była nałożona
+      if (mqlMobile.matches) {
+        document.body.style.overflow = "";
+      }
+
+      const mainEl = document.querySelector("main");
+      if (mainEl) mainEl.removeAttribute("aria-hidden");
+
+      if (lastFocused && typeof lastFocused.focus === "function") {
+        lastFocused.focus();
+      }
+      lastFocused = null;
+      trapped = false;
+    },
+  };
+}
+
 // --- MEDIA QUERY CACHING ---
 const mqlMobile = window.matchMedia("(max-width: 767px)");
 
 // --- MENU MODULE ---
 const menuModule = (function () {
   let menuContainer, menuToggle, closeMenu, menuOverlay, menuElement;
-  let lastFocusedBeforeMenu = null;
-  let trapped = false;
-  let focusableInMenu = [];
-  let firstFocusable = null;
-  let lastFocusable = null;
-  let focusTrapHandler = null;
+  let focusTrapInstance = null;
 
   function init() {
     menuContainer = document.querySelector(".layout__wrapper");
@@ -27,132 +140,39 @@ const menuModule = (function () {
         toggleMenu();
       }
     });
-  }
 
-  document.querySelectorAll(".navigation-menu a[href^='#']").forEach((link) => {
-    link.addEventListener("click", () => {
-      if (menuContainer && menuContainer.classList.contains("menu-active")) {
-        toggleMenu();
-      }
+    // Obsługa linków w menu (przeniesiona do init żeby mieć pewność, że DOM jest gotowy)
+    const menuLinks = document.querySelectorAll(
+      ".navigation-menu a[href^='#']"
+    );
+    menuLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        if (menuContainer && menuContainer.classList.contains("menu-active")) {
+          toggleMenu();
+        }
+      });
     });
-  });
+  }
 
   function toggleMenu() {
     const isActive = menuContainer.classList.toggle("menu-active");
-    menuToggle.setAttribute("aria-expanded", isActive);
+    menuToggle.setAttribute("aria-expanded", String(isActive));
     menuToggle.setAttribute(
       "aria-label",
       isActive ? "Close menu" : "Open menu"
     );
 
     if (isActive) {
-      enableFocusTrap(menuElement);
+      // utwórz instancję focus trap przy pierwszym otwarciu
+      focusTrapInstance =
+        focusTrapInstance ||
+        createFocusTrap(menuElement, { onEscape: toggleMenu });
+      focusTrapInstance.enable();
     } else {
-      disableFocusTrap(menuElement);
-    }
-  }
-
-  function getFocusableElements(container) {
-    if (!container) return [];
-    const elements = Array.from(
-      container.querySelectorAll(
-        'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex]:not([tabindex="-1"]), [contenteditable]'
-      )
-    );
-
-    return elements.filter(
-      (el) =>
-        el.offsetWidth > 0 ||
-        el.offsetHeight > 0 ||
-        el.getClientRects().length > 0
-    );
-  }
-
-  function enableFocusTrap(menuEl) {
-    if (!menuEl || trapped) {
-      lastFocusedBeforeMenu = lastFocusedBeforeMenu || document.activeElement;
-      return;
-    }
-
-    lastFocusedBeforeMenu = document.activeElement;
-    focusableInMenu = getFocusableElements(menuEl);
-    firstFocusable = focusableInMenu[0] || null;
-    lastFocusable = focusableInMenu[focusableInMenu.length - 1] || null;
-
-    if (firstFocusable) {
-      try {
-        firstFocusable.focus();
-      } catch (e) {
-        menuEl.setAttribute("tabindex", "-1");
-        menuEl.focus();
+      if (focusTrapInstance) {
+        focusTrapInstance.disable();
       }
-    } else {
-      menuEl.setAttribute("tabindex", "-1");
-      menuEl.focus();
     }
-
-    document.body.style.overflow = "hidden";
-
-    const mainEl = document.querySelector("main");
-    if (mainEl) {
-      mainEl.setAttribute("aria-hidden", "true");
-    }
-
-    focusTrapHandler = function (e) {
-      if (e.key === "Tab") {
-        if (!firstFocusable || !lastFocusable) {
-          e.preventDefault();
-          menuEl.focus();
-          return;
-        }
-
-        if (e.shiftKey) {
-          if (document.activeElement === firstFocusable) {
-            e.preventDefault();
-            lastFocusable.focus();
-          }
-        } else {
-          if (document.activeElement === lastFocusable) {
-            e.preventDefault();
-            firstFocusable.focus();
-          }
-        }
-      } else if (e.key === "Escape") {
-        e.preventDefault();
-        if (menuContainer && menuContainer.classList.contains("menu-active")) {
-          toggleMenu();
-        }
-      }
-    };
-
-    document.addEventListener("keydown", focusTrapHandler);
-    trapped = true;
-  }
-
-  function disableFocusTrap(menuEl) {
-    if (!trapped) return;
-
-    document.removeEventListener("keydown", focusTrapHandler);
-    focusTrapHandler = null;
-    trapped = false;
-
-    document.body.style.overflow = "";
-
-    const mainEl = document.querySelector("main");
-    if (mainEl) {
-      mainEl.removeAttribute("aria-hidden");
-    }
-
-    if (
-      lastFocusedBeforeMenu &&
-      typeof lastFocusedBeforeMenu.focus === "function"
-    ) {
-      lastFocusedBeforeMenu.focus();
-    }
-    lastFocusedBeforeMenu = null;
-    focusableInMenu = [];
-    firstFocusable = null;
-    lastFocusable = null;
   }
 
   return { init };
@@ -162,7 +182,7 @@ const menuModule = (function () {
 const modalModule = (function () {
   let modal, modalOverlay, closeModal, productIdEl, modalImg;
   let lastFocusedElement;
-  let trapFocusHandler; // handler do trap focus
+  let focusTrapInstance = null;
 
   const altMapping = {
     1: "Pink alpine climbing jacket with hood, insulated and waterproof",
@@ -191,12 +211,6 @@ const modalModule = (function () {
 
     closeModal?.addEventListener("click", hide);
     modalOverlay?.addEventListener("click", hide);
-
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape" && modal.style.display === "flex") {
-        hide();
-      }
-    });
 
     document.querySelectorAll(".product-list__item").forEach((el) => {
       el.setAttribute("tabindex", "0");
@@ -244,7 +258,6 @@ const modalModule = (function () {
     });
   }
 
-  // show używa TERAZ imageNum z DOM (a nie liczy go z rawId)
   function show(rawId, imageNum) {
     lastFocusedElement = document.activeElement;
 
@@ -280,44 +293,21 @@ const modalModule = (function () {
 
     closeModal.focus();
 
-    trapFocusHandler = trapFocus.bind(null, modal);
-    document.addEventListener("keydown", trapFocusHandler);
+    focusTrapInstance = createFocusTrap(modal, { onEscape: hide });
+    focusTrapInstance.enable();
   }
 
   function hide() {
     modal.style.display = "none";
     modalOverlay.style.display = "none";
 
-    if (trapFocusHandler) {
-      document.removeEventListener("keydown", trapFocusHandler);
-      trapFocusHandler = null;
+    if (focusTrapInstance) {
+      focusTrapInstance.disable();
+      focusTrapInstance = null;
     }
 
     if (lastFocusedElement) {
       lastFocusedElement.focus();
-    }
-  }
-
-  // Uwięzienie fokusu w modalu
-  function trapFocus(modalElement, event) {
-    if (event.key !== "Tab") return;
-
-    const focusableElements = modalElement.querySelectorAll(
-      'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
-    );
-    const firstElement = focusableElements[0];
-    const lastElement = focusableElements[focusableElements.length - 1];
-
-    if (event.shiftKey) {
-      if (document.activeElement === firstElement) {
-        event.preventDefault();
-        lastElement.focus();
-      }
-    } else {
-      if (document.activeElement === lastElement) {
-        event.preventDefault();
-        firstElement.focus();
-      }
     }
   }
 
@@ -389,9 +379,7 @@ const swiperModule = (function () {
     const containerRect = swiperInstance.el.getBoundingClientRect();
 
     slides.forEach((slide) => {
-      const focusableElements = slide.querySelectorAll(
-        'a, button, input, textarea, select, [tabindex]:not([tabindex="-1"])'
-      );
+      const focusableElements = slide.querySelectorAll(FOCUSABLE_SELECTOR);
 
       // Sprawdź czy to duplikat (Swiper dodaje klasę swiper-slide-duplicate)
       const isDuplicate = slide.classList.contains("swiper-slide-duplicate");
@@ -490,7 +478,6 @@ const swiperModule = (function () {
     })();
 
     swiperElement.addEventListener("keydown", (e) => {
-      // Sprawdzamy czy focus jest na kontenerze swiper
       if (document.activeElement === swiperElement) {
         switch (e.key) {
           case "ArrowLeft":
@@ -610,7 +597,6 @@ const dropdownModule = (function () {
       }
     });
 
-    // Obsługa Escape na poziomie document, gdy lista jest otwarta
     document.addEventListener("keydown", (e) => {
       if (
         e.key === "Escape" &&
@@ -713,7 +699,7 @@ const dropdownModule = (function () {
   return { init };
 })();
 
-// ----- PROMO MODULE -----
+// --- PROMO MODULE ---
 const promoModule = (function () {
   const PROMO_KEY = "promoBannerShown";
   let promoBanner, promoButton;
@@ -766,6 +752,16 @@ const metaModule = (function () {
     const data = pageMeta[hash] || pageMeta[""];
     document.title = data.title;
     document.querySelector('meta[name="description"]').content = data.desc;
+
+    // Unifikacja aria-hidden
+    const sections = document.querySelectorAll("main > section");
+    sections.forEach((section) => {
+      if ("#" + section.id === hash || (!hash && section.id === "")) {
+        section.removeAttribute("aria-hidden");
+      } else {
+        section.setAttribute("aria-hidden", "true");
+      }
+    });
   }
 
   return { init };
